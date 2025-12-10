@@ -1,0 +1,16 @@
+dist: {}
+functions:
+  - name: convertFile
+    handler: functions/convert.js
+  - name: extractText
+    handler: functions/extract.js
+  - name: processAI
+    handler: functions/ai.js
+
+build:
+  functions: backend/dist
+
+env:
+  - DB_URL
+  - JWT_SECRET
+  - CLOUDINARY_URL

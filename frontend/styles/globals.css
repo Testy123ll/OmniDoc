@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-dark-bg text-white font-sans antialiased;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(131, 56, 236, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 245, 255, 0.1) 0%, transparent 50%);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold;
+}
+
+h1 {
+  @apply text-5xl md:text-6xl font-black leading-tight;
+}
+
+h2 {
+  @apply text-4xl md:text-5xl font-bold leading-tight;
+}
+
+h3 {
+  @apply text-2xl md:text-3xl font-bold;
+}
+
+/* Utility Classes */
+.glass-panel {
+  @apply backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl;
+}
+
+.glass-button {
+  @apply backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/20 
+         transition-all duration-300 rounded-lg px-4 py-2;
+}
+
+.neon-glow {
+  @apply shadow-lg;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.neon-pink {
+  @apply text-neon-pink;
+}
+
+.neon-purple {
+  @apply text-neon-purple;
+}
+
+.neon-cyan {
+  @apply text-neon-cyan;
+}
+
+.neon-green {
+  @apply text-neon-green;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #ff006e, #8338ec, #00f5ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-border {
+  position: relative;
+  background: linear-gradient(#0a0e27, #0a0e27) padding-box,
+              linear-gradient(135deg, #ff006e, #8338ec, #00f5ff) border-box;
+  border: 2px solid transparent;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-secondary rounded-lg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neon-purple rounded-lg hover:bg-neon-pink transition-colors;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.5s ease-in-out;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 0.5s ease-in-out;
+}
