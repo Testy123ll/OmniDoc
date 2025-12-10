@@ -9,7 +9,7 @@ export default function ThemeWrapper({
   children: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
-  const { isDarkMode } = useAppStore();
+  const isDarkMode = useAppStore((state) => state.isDarkMode);
 
   useEffect(() => {
     setMounted(true);
