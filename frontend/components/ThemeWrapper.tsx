@@ -1,6 +1,5 @@
 "use client";
 
-import { useAppStore } from "@/store/app";
 import { useEffect, useState } from "react";
 
 export default function ThemeWrapper({
@@ -9,17 +8,20 @@ export default function ThemeWrapper({
   children: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
-  const isDarkMode = useAppStore((state) => state.isDarkMode);
 
   useEffect(() => {
     setMounted(true);
+    // Only access store after mounting
+    const { useAppStore } = require("@/store/app");
+    const isDarkMode = useAppStore.getState().isDarkMode;
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [isDarkMode]);
+  }, []);
 
+  // Don't render children until mounted to avoid hydration mismatch
   if (!mounted) {
     return <>{children}</>;
   }

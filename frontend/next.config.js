@@ -14,11 +14,6 @@ const nextConfig = {
       },
     ],
   },
-  // Skip static generation for error pages that have dynamic content
-  staticPageGenerationTimeout: 0,
-  experimental: {
-    isrMemoryCacheSize: 0,
-  },
   webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
