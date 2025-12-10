@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import ThemeWrapper from "@/components/ThemeWrapper";
 
+export const dynamic = "force-dynamic";
+
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
