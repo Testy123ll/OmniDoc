@@ -5,6 +5,8 @@ import PricingSection from "@/components/home/PricingSection";
 import AboutSection from "@/components/home/AboutSection";
 import Footer from "@/components/common/Footer";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <div className="bg-dark-bg">
