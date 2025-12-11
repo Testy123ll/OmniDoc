@@ -3,10 +3,10 @@
   "outputDirectory": ".next",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "env": [
-    "NEXT_PUBLIC_API_URL",
-    "NEXT_PUBLIC_GOOGLE_CLIENT_ID"
-  ],
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@next_public_api_url",
+    "NEXT_PUBLIC_GOOGLE_CLIENT_ID": "@next_public_google_client_id"
+  },
   "regions": ["iad1"]
 }
 
