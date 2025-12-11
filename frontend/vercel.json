@@ -7,5 +7,7 @@
     "NEXT_PUBLIC_API_URL",
     "NEXT_PUBLIC_GOOGLE_CLIENT_ID"
   ],
-  "envPrefix": "NEXT_PUBLIC_"
+  "envPrefix": "NEXT_PUBLIC_",
+  "regions": ["iad1"]
 }
+
