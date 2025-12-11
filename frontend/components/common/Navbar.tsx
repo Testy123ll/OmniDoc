@@ -2,13 +2,27 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useAppStore } from "@/store/app";
 import { Moon, Sun, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isDarkMode, toggleDarkMode } = useAppStore();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Only access store after mounting
+    const { useAppStore } = require("@/store/app");
+    const store = useAppStore.getState();
+    setIsDarkMode(store.isDarkMode);
+  }, []);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    const { useAppStore } = require("@/store/app");
+    useAppStore.setState({ isDarkMode: !isDarkMode });
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-panel m-2 md:m-4">

@@ -7,8 +7,6 @@ import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import VerifyEmailClient from "@/components/auth/VerifyEmailClient";
 
-export const dynamic = "force-dynamic";
-
 function VerifyEmailContent() {
   return (
     <div className="min-h-screen bg-dark-bg flex flex-col">
