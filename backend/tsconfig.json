@@ -16,7 +16,10 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["node"],
+    "allowJs": true,
+    "noEmit": false
   },
   "include": ["src/**/*", "api/**/*"],
   "exclude": ["node_modules", "dist"]

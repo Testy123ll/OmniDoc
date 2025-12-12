@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 
 // Create Express app for serverless
@@ -22,22 +22,22 @@ app.use("/api/ai", require("../src/routes/aiRoutes").default);
 app.use("/api/pdf", require("../src/routes/pdfRoutes").default);
 
 // Health check
-app.get("/api/health", (req, res) => {
+app.get("/api/health", (req: Request, res: Response) => {
   res.json({ status: "OK", timestamp: new Date(), environment: "serverless" });
 });
 
 // Root endpoint
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.json({ message: "OmniDoc API Server", status: "running" });
 });
 
 // 404 handler
-app.use((req, res) => {
+app.use((req: Request, res: Response) => {
   res.status(404).json({ message: "Endpoint not found", path: req.path });
 });
 
 // Error handling middleware
-app.use((err: any, req: any, res: any, next: any) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("Error occurred:", err);
   res.status(500).json({ 
     message: "Internal server error",
