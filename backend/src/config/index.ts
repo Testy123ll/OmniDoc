@@ -15,3 +15,19 @@ export const config = {
     apiSecret: process.env.CLOUDINARY_API_SECRET,
   },
 };
+
+// Validate required environment variables in production
+if (config.nodeEnv === 'production') {
+  const missingVars: string[] = [];
+
+  if (!process.env.MONGODB_URI && !process.env.DATABASE_URL) missingVars.push('MONGODB_URI or DATABASE_URL');
+  if (!process.env.JWT_SECRET) missingVars.push('JWT_SECRET');
+  if (!process.env.CLOUDINARY_NAME) missingVars.push('CLOUDINARY_NAME');
+  if (!process.env.CLOUDINARY_API_KEY) missingVars.push('CLOUDINARY_API_KEY');
+  if (!process.env.CLOUDINARY_API_SECRET) missingVars.push('CLOUDINARY_API_SECRET');
+
+  if (missingVars.length > 0) {
+    throw new Error(`Missing required environment variables for production: ${missingVars.join(', ')}`);
+  }
+}
+

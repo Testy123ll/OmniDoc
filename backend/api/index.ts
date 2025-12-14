@@ -1,5 +1,6 @@
+import 'tsconfig-paths/register';
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 
 // Create Express app for serverless
@@ -9,6 +10,8 @@ const app = express();
 app.use(cors({
   origin: "*",
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 // Middleware
@@ -16,28 +19,35 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Routes - imported inline to avoid module loading issues
+// Using require to ensure they are loaded only when this function initializes
+// tsconfig-paths should handle the alias resolution now
 app.use("/api/auth", require("../src/routes/authRoutes").default);
 app.use("/api/files", require("../src/routes/fileRoutes").default);
 app.use("/api/ai", require("../src/routes/aiRoutes").default);
 app.use("/api/pdf", require("../src/routes/pdfRoutes").default);
 
 // Health check
-app.get("/api/health", (req, res) => {
-  res.json({ status: "OK", timestamp: new Date(), environment: "serverless" });
+app.get("/api/health", (req: Request, res: Response) => {
+  res.json({ 
+    status: "OK", 
+    timestamp: new Date(), 
+    environment: "serverless",
+    dbConnection: process.env.MONGODB_URI ? "configured" : "missing"
+  });
 });
 
 // Root endpoint
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.json({ message: "OmniDoc API Server", status: "running" });
 });
 
 // 404 handler
-app.use((req, res) => {
+app.use((req: Request, res: Response) => {
   res.status(404).json({ message: "Endpoint not found", path: req.path });
 });
 
 // Error handling middleware
-app.use((err: any, req: any, res: any, next: any) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("Error occurred:", err);
   res.status(500).json({ 
     message: "Internal server error",
@@ -55,6 +65,7 @@ export default async (req: VercelRequest, res: VercelResponse) => {
   
   // Connect to database for each request in serverless environment
   try {
+    // Dynamic import to allow cold start optimization and path resolution
     const { connectDB } = require("../src/config/database");
     await connectDB();
   } catch (dbError) {
