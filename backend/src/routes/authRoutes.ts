@@ -6,8 +6,8 @@ import {
   verifyEmail,
   resendVerificationEmail,
   googleAuth,
-} from "@/controllers/authController";
-import { authenticate } from "@/middleware/auth";
+} from "../controllers/authController";
+import { authenticate } from "../middleware/auth";
 
 const router = express.Router();
 

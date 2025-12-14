@@ -7,9 +7,9 @@ import {
   getConversionStatus,
   getFile,
   batchConvert,
-} from "@/controllers/fileController";
-import { authenticate } from "@/middleware/auth";
-import { fileUpload } from "@/utils/upload";
+} from "../controllers/fileController";
+import { authenticate } from "../middleware/auth";
+import { fileUpload } from "../utils/upload";
 
 const router = express.Router();
 

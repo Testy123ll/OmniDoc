@@ -5,8 +5,8 @@ import {
   summarize,
   translate,
   analyze,
-} from "@/controllers/aiController";
-import { authenticate } from "@/middleware/auth";
+} from "../controllers/aiController";
+import { authenticate } from "../middleware/auth";
 
 const router = express.Router();
 

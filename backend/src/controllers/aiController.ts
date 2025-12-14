@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { AIService } from "@/services/AIService";
-import AIPrompt from "@/models/AIPrompt";
+import { AIService } from "../services/AIService";
+import AIPrompt from "../models/AIPrompt";
 
 interface AuthRequest extends Request {
   userId?: string;

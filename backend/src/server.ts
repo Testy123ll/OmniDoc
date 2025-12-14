@@ -1,13 +1,13 @@
 import express, { Express } from "express";
 import cors from "cors";
 import * as path from "path";
-import { config } from "@/config";
-import { authenticate, errorHandler } from "@/middleware/auth";
-import authRoutes from "@/routes/authRoutes";
-import fileRoutes from "@/routes/fileRoutes";
-import aiRoutes from "@/routes/aiRoutes";
-import pdfRoutes from "@/routes/pdfRoutes";
-import { connectDB } from "@/config/database";
+import { config } from "./config";
+import { authenticate, errorHandler } from "./middleware/auth";
+import authRoutes from "./routes/authRoutes";
+import fileRoutes from "./routes/fileRoutes";
+import aiRoutes from "./routes/aiRoutes";
+import pdfRoutes from "./routes/pdfRoutes";
+import { connectDB } from "./config/database";
 
 const app: Express = express();
 

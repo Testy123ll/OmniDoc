@@ -1,4 +1,3 @@
-import 'tsconfig-paths/register';
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";

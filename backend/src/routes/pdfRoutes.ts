@@ -4,8 +4,8 @@ import {
   addAnnotation,
   mergePDFs,
   splitPDF,
-} from "@/controllers/pdfController";
-import { authenticate } from "@/middleware/auth";
+} from "../controllers/pdfController";
+import { authenticate } from "../middleware/auth";
 
 const router = express.Router();
 

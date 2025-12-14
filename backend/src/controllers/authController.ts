@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import User from "@/models/User";
-import { config } from "@/config";
+import User from "../models/User";
+import { config } from "../config";
 import nodemailer, { Transporter } from "nodemailer";
 import crypto from "crypto";
 
