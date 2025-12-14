@@ -7,19 +7,29 @@ import nodemailer, { Transporter } from "nodemailer";
 import crypto from "crypto";
 
 // Email transporter (configure with your email service)
-let transporter: Transporter;
+// Email transporter (configure with your email service)
+let transporter: Transporter | null = null;
 
-try {
-  transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER || "your-email@gmail.com",
-      pass: process.env.EMAIL_PASSWORD || "your-app-password",
-    },
-  });
-} catch (err) {
-  console.warn("Email transporter not configured");
-}
+const initializeTransporter = () => {
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
+    try {
+      transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+      console.log("📧 Email service configured successfully");
+    } catch (err) {
+      console.warn("⚠️ Failed to create email transporter:", err);
+    }
+  } else {
+    console.warn("⚠️ Email credentials (EMAIL_USER, EMAIL_PASSWORD) not found. Email verification will be skipped.");
+  }
+};
+
+initializeTransporter();
 
 const generateVerificationToken = () => {
   return crypto.randomBytes(32).toString("hex");
@@ -70,8 +80,9 @@ export const register = async (req: Request, res: Response) => {
     // Log verification link for development
     console.log(`\n📧 Verification link for ${email}:\n${verificationUrl}\n`);
 
-    try {
-      if (transporter) {
+    // Verify transporter exists before attempting to send
+    if (transporter) {
+      try {
         await transporter.sendMail({
           to: email,
           subject: "Verify your OmniDoc email",
@@ -86,9 +97,12 @@ export const register = async (req: Request, res: Response) => {
           `,
         });
         console.log(`✅ Verification email sent to ${email}`);
+      } catch (emailError) {
+        console.error("❌ Email sending failed:", emailError);
+        // Do not crash the request, just log it
       }
-    } catch (emailError) {
-      console.warn("Email sending failed:", emailError);
+    } else {
+      console.log("ℹ️ Email service not configured. Skipping verification email.");
     }
 
     res.status(201).json({
@@ -220,6 +234,12 @@ export const googleAuth = async (req: Request, res: Response) => {
       // Link Google account to existing user
       user.googleId = googleId;
       if (picture) user.picture = picture;
+      // Trust Google verified email
+      if (!user.emailVerified) {
+        user.emailVerified = true;
+        user.verificationToken = undefined;
+        user.verificationTokenExpires = undefined;
+      }
       await user.save();
     }
 
