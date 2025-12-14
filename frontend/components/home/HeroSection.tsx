@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { FileUp, Zap, Shield, Layers } from "lucide-react";
 
 export default function HeroSection() {
