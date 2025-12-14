@@ -39,38 +39,8 @@ export default function Navbar() {
             </Link>
           </motion.div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-1">
-            {[
-              { label: "Features", href: "/#features" },
-              { label: "About", href: "/about" },
-            ].map((item, idx) => (
-              <motion.div
-                key={item.href}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-              >
-                <Link
-                  href={item.href}
-                  className="px-4 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-all"
-                >
-                  {item.label}
-                </Link>
-              </motion.div>
-            ))}
-          </div>
           {/* Right Actions */}
           <div className="flex items-center space-x-3 md:space-x-4">
-            <Link
-              href="/app"
-              className="hidden md:block px-6 py-2 rounded-lg font-semibold 
-                         bg-gradient-to-r from-neon-pink to-neon-purple 
-                         hover:shadow-lg hover:shadow-neon-pink/50 transition-all text-white"
-            >
-              Open Dashboard
-            </Link>
-
             {/* Mobile Menu Button */}
             <button
               className="md:hidden p-2 rounded-lg glass-button"
@@ -88,20 +58,13 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             className="md:hidden pb-4 space-y-2"
           >
-            {[
-              { label: "Features", href: "#features" },
-              { label: "About", href: "/about" },
-              { label: "Open Dashboard", href: "/app" },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="block px-4 py-2 rounded-lg text-white/80 hover:bg-white/10 transition-all"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
+            <Link
+              href="/"
+              className="block px-4 py-2 rounded-lg text-white/80 hover:bg-white/10 transition-all"
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </Link>
           </motion.div>
         )}
       </div>
