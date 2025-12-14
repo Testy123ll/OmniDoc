@@ -86,7 +86,9 @@ export const analyze = async (req: AuthRequest, res: Response) => {
   try {
     const { text } = req.body;
     const result = await AIService.analyze(text);
-    await savePrompt(req.userId!, "analyze", text, result);
+    if (req.userId) {
+      await savePrompt(req.userId, "analyze", text, result);
+    }
     res.json({ result });
   } catch (error) {
     res.status(500).json({ error: "Analysis failed" });

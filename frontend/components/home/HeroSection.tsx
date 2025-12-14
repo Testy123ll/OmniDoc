@@ -79,12 +79,14 @@ export default function HeroSection() {
           transition={{ delay: 0.8 }}
           className="flex flex-col md:flex-row gap-4 justify-center mb-12"
         >
-          <button
-            className="px-8 py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-neon-pink to-neon-purple 
-                       hover:shadow-2xl hover:shadow-neon-pink/50 transition-all transform hover:scale-105"
-          >
-            Start Converting
-          </button>
+          <Link href="/app">
+            <button
+              className="px-8 py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-neon-pink to-neon-purple 
+                         hover:shadow-2xl hover:shadow-neon-pink/50 transition-all transform hover:scale-105"
+            >
+              Start Converting
+            </button>
+          </Link>
           <button
             className="px-8 py-4 rounded-xl font-bold text-lg glass-button hover:bg-white/20 transition-all"
           >

@@ -3,7 +3,6 @@ import cors from "cors";
 import * as path from "path";
 import { config } from "./config";
 import { authenticate, errorHandler } from "./middleware/auth";
-import authRoutes from "./routes/authRoutes";
 import fileRoutes from "./routes/fileRoutes";
 import aiRoutes from "./routes/aiRoutes";
 import pdfRoutes from "./routes/pdfRoutes";
@@ -36,7 +35,6 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // Routes
-app.use("/api/auth", authRoutes);
 app.use("/api/files", fileRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/pdf", pdfRoutes);

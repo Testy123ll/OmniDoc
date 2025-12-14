@@ -43,7 +43,6 @@ export default function Navbar() {
           <div className="hidden md:flex space-x-1">
             {[
               { label: "Features", href: "/#features" },
-              { label: "Pricing", href: "/#pricing" },
               { label: "About", href: "/about" },
             ].map((item, idx) => (
               <motion.div
@@ -64,20 +63,12 @@ export default function Navbar() {
           {/* Right Actions */}
           <div className="flex items-center space-x-3 md:space-x-4">
             <Link
-              href="/signin"
-              className="hidden md:block px-4 py-2 rounded-lg font-semibold text-white/80
-                         hover:text-white hover:bg-white/10 transition-all"
-            >
-              Sign In
-            </Link>
-
-            <Link
-              href="/signup"
+              href="/app"
               className="hidden md:block px-6 py-2 rounded-lg font-semibold 
                          bg-gradient-to-r from-neon-pink to-neon-purple 
-                         hover:shadow-lg hover:shadow-neon-pink/50 transition-all"
+                         hover:shadow-lg hover:shadow-neon-pink/50 transition-all text-white"
             >
-              Sign Up
+              Open Dashboard
             </Link>
 
             {/* Mobile Menu Button */}
@@ -99,10 +90,8 @@ export default function Navbar() {
           >
             {[
               { label: "Features", href: "#features" },
-              { label: "Pricing", href: "#pricing" },
               { label: "About", href: "/about" },
-              { label: "Sign In", href: "/signin" },
-              { label: "Sign Up", href: "/signup" },
+              { label: "Open Dashboard", href: "/app" },
             ].map((item) => (
               <Link
                 key={item.href}
