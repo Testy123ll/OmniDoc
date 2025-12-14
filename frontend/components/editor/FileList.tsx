@@ -41,7 +41,7 @@ export default function FileList() {
           </div>
 
           <div className="flex items-center space-x-2">
-            <Link href={`/app/editor/${file.id}`}>
+            <Link href={`/editor/${file.id}`}>
               <button className="p-2 rounded-lg glass-button hover:bg-white/20 transition">
                 <Edit2 size={18} />
               </button>

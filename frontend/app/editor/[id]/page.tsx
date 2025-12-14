@@ -1,194 +1,133 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/common/Navbar";
-import {
-  ZoomIn,
-  ZoomOut,
-  RotateCw,
-  Download,
-  Save,
-  Trash2,
-  Type,
-  Highlighter,
-  MessageSquare,
-} from "lucide-react";
+import AISidebar from "@/components/ai/AISidebar";
+import { FileText, Settings, Download, Share2, ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { useAppStore } from "@/store/app";
 
-interface PDFEditorProps {
-  params: {
-    id: string;
-  };
-}
+export default function EditorPage() {
+  const params = useParams();
+  const fileId = params.id as string;
+  const { uploadedFiles } = useAppStore();
+  const [file, setFile] = useState<any>(null);
 
-export default function PDFEditor({ params }: PDFEditorProps) {
-  const [zoom, setZoom] = useState(100);
-  const [rotation, setRotation] = useState(0);
-  const [selectedTool, setSelectedTool] = useState<string | null>(null);
+  useEffect(() => {
+    // Find file from store
+    const foundFile = uploadedFiles.find((f) => f.id === fileId);
+    if (foundFile) {
+      setFile(foundFile);
+    }
+  }, [fileId, uploadedFiles]);
 
-  const tools = [
-    { id: "text", icon: Type, label: "Add Text" },
-    { id: "highlight", icon: Highlighter, label: "Highlight" },
-    { id: "comment", icon: MessageSquare, label: "Comment" },
-    { id: "draw", icon: Trash2, label: "Draw" },
-  ];
+  if (!file) {
+    return (
+        <div className="min-h-screen bg-dark-bg flex items-center justify-center">
+             <div className="text-center">
+                 <h1 className="text-2xl font-bold mb-4">File not found</h1>
+                 <Link href="/" className="text-neon-cyan hover:underline">Return to Dashboard</Link>
+             </div>
+        </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-dark-bg">
+    <div className="min-h-screen bg-dark-bg flex flex-col overflow-hidden">
       <Navbar />
 
-      <main className="pt-20 pb-8">
-        {/* Toolbar */}
+      <div className="flex-1 flex pt-20 pb-4 px-4 gap-4 h-screen max-h-screen max-w-[1920px] mx-auto w-full">
+        {/* LEFT PANEL: Metadata & Tools */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass-panel m-4 p-4 flex flex-wrap items-center justify-between gap-4 rounded-xl"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          className="w-72 hidden lg:flex flex-col gap-4"
         >
-          {/* Left - Zoom & View Controls */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setZoom(Math.max(25, zoom - 10))}
-              className="p-2 rounded-lg glass-button hover:bg-white/20 transition"
-              title="Zoom out"
-            >
-              <ZoomOut size={20} />
-            </button>
-            <span className="px-4 py-2 glass-button rounded-lg text-sm font-semibold">
-              {zoom}%
-            </span>
-            <button
-              onClick={() => setZoom(Math.min(200, zoom + 10))}
-              className="p-2 rounded-lg glass-button hover:bg-white/20 transition"
-              title="Zoom in"
-            >
-              <ZoomIn size={20} />
-            </button>
+          {/* Back Button */}
+          <Link href="/">
+             <button className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-2">
+                 <ArrowLeft size={16} /> Back to Dashboard
+             </button>
+          </Link>
 
-            <div className="w-px h-8 bg-white/20 mx-2"></div>
-
-            <button
-              onClick={() => setRotation((r) => (r + 90) % 360)}
-              className="p-2 rounded-lg glass-button hover:bg-white/20 transition"
-              title="Rotate"
->
-              <RotateCw size={20} />
-            </button>
+          {/* File Info Card */}
+          <div className="glass-panel p-5 flex flex-col gap-4">
+             <div className="flex items-center gap-3">
+                 <div className="p-3 rounded-lg bg-neon-purple/20 text-neon-purple">
+                     <FileText size={24} />
+                 </div>
+                 <div className="overflow-hidden">
+                     <h2 className="font-bold truncate text-sm" title={file.name}>{file.name}</h2>
+                     <p className="text-xs text-white/50">{file.type?.toUpperCase()}</p>
+                 </div>
+             </div>
+             
+             <div className="grid grid-cols-2 gap-2 mt-2">
+                 <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition flex flex-col items-center gap-1">
+                     <Download size={16} />
+                     <span className="text-[10px] opacity-70">Export</span>
+                 </button>
+                 <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition flex flex-col items-center gap-1">
+                     <Share2 size={16} />
+                     <span className="text-[10px] opacity-70">Share</span>
+                 </button>
+             </div>
           </div>
 
-          {/* Middle - Edit Tools */}
-          <div className="flex items-center gap-2">
-            {tools.map((tool) => (
-              <motion.button
-                key={tool.id}
-                onClick={() =>
-                  setSelectedTool(selectedTool === tool.id ? null : tool.id)
-                }
-                whileHover={{ scale: 1.05 }}
-                className={`p-2 rounded-lg transition ${
-                  selectedTool === tool.id
-                    ? "bg-neon-purple text-white"
-                    : "glass-button hover:bg-white/20"
-                }`}
-                title={tool.label}
-              >
-                <tool.icon size={20} />
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Right - Actions */}
-          <div className="flex items-center gap-2">
-            <button className="p-2 rounded-lg glass-button hover:bg-white/20 transition">
-              <Save size={20} />
-            </button>
-            <button className="p-2 rounded-lg glass-button hover:bg-white/20 transition">
-              <Download size={20} />
-            </button>
+          {/* Tools List (Mock) */}
+          <div className="glass-panel flex-1 p-5 overflow-y-auto">
+              <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">Editor Tools</h3>
+              <div className="space-y-2">
+                  {["Text Formatting", "Insert Image", "Add Signature", "Watermark", "Page Numbers"].map((tool, i) => (
+                      <button key={i} className="w-full text-left p-3 rounded-lg hover:bg-white/5 text-sm transition-colors flex items-center justify-between group">
+                          {tool}
+                          <Settings size={14} className="opacity-0 group-hover:opacity-50" />
+                      </button>
+                  ))}
+              </div>
           </div>
         </motion.div>
 
-        {/* Editor Area */}
-        <div className="flex gap-4 px-4">
-          {/* Sidebar - Thumbnails */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="hidden lg:block w-32 glass-panel p-4 rounded-xl h-[600px] overflow-y-auto"
-          >
-            <h3 className="font-bold mb-4 text-sm">Pages</h3>
-            <div className="space-y-2">
-              {[1, 2, 3, 4, 5].map((page) => (
-                <motion.div
-                  key={page}
-                  whileHover={{ scale: 1.05 }}
-                  className="aspect-[3/4] bg-gradient-to-br from-neon-purple/30 to-neon-cyan/30 rounded-lg 
-                             border-2 border-white/20 hover:border-neon-pink cursor-pointer transition-all flex 
-                             items-center justify-center text-xs font-bold"
-                >
-                  Page {page}
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Main Canvas */}
-          <motion.div
+        {/* CENTER PANEL: Document Viewer */}
+        <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex-1 flex items-center justify-center"
-          >
-            <div
-              className="glass-panel p-8 rounded-xl shadow-2xl"
-              style={{
-                transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-              }}
-            >
-              {/* PDF/Document Preview Placeholder */}
-              <div className="w-96 h-[528px] bg-gradient-to-br from-white to-gray-200 rounded-lg shadow-lg 
-                            flex items-center justify-center border-2 border-white/20">
-                <div className="text-center text-gray-600">
-                  <p className="text-lg font-bold">Document ID: {params.id}</p>
-                  <p className="text-sm mt-2">PDF/Document content appears here</p>
+            className="flex-1 glass-panel relative flex flex-col"
+        >
+            {/* Toolbar */}
+            <div className="h-14 border-b border-white/10 flex items-center justify-between px-6">
+                <div className="flex items-center gap-4">
+                    <span className="text-sm font-mono text-white/50">Page 1 / 1</span>
+                    <div className="h-4 w-px bg-white/10"></div>
+                    <div className="flex gap-2">
+                        <button className="p-1.5 hover:bg-white/10 rounded">Fit</button>
+                        <button className="p-1.5 hover:bg-white/10 rounded">50%</button>
+                        <button className="p-1.5 hover:bg-white/10 rounded">100%</button>
+                    </div>
                 </div>
-              </div>
             </div>
-          </motion.div>
 
-          {/* Properties Panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="hidden lg:block w-80 glass-panel p-6 rounded-xl"
-          >
-            <h3 className="font-bold mb-4">Properties</h3>
-            {selectedTool ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm text-white/60 block mb-2">
-                    Tool: {selectedTool.toUpperCase()}
-                  </label>
-                  {selectedTool === "text" && (
-                    <>
-                      <input
-                        type="text"
-                        placeholder="Enter text"
-                        className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm"
-                      />
-                      <select className="w-full mt-2 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm">
-                        <option>Font: Arial</option>
-                        <option>Helvetica</option>
-                        <option>Times</option>
-                      </select>
-                    </>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <p className="text-white/60 text-sm">Select a tool to edit properties</p>
-            )}
-          </motion.div>
+            {/* Canvas Area */}
+            <div className="flex-1 bg-black/20 overflow-auto p-8 flex justify-center">
+                 <div className="w-full max-w-3xl bg-white text-black min-h-[800px] shadow-2xl p-12">
+                     <h1 className="text-3xl font-bold mb-6 text-black">{file.name}</h1>
+                     <p className="text-gray-600 mb-4">
+                         This is a preview of your document contents. In the production version, this would be a full-fidelity canvas renderer for PDF, Word, and Image formats.
+                     </p>
+                     <p className="text-gray-600">
+                         For now, you can use the AI sidebar on the right to interact with this document context.
+                     </p>
+                 </div>
+            </div>
+        </motion.div>
+
+        {/* RIGHT PANEL: AI Sidebar */}
+        <div className="w-80 hidden md:block">
+            <AISidebar />
         </div>
-      </main>
+      </div>
     </div>
   );
 }

@@ -16,18 +16,48 @@ export default function Home() {
       <Navbar />
 
       <main className="pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Header & Quick Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-12"
+          className="mb-12 text-center"
         >
-          <h1 className="text-4xl md:text-5xl font-black gradient-text mb-2">
-            Document Workspace
+          <div className="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-md">
+            <span className="text-neon-cyan text-sm font-mono uppercase tracking-wider">Universal Workspace v1.0</span>
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight">
+            <span className="text-white">OMNI</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-neon-cyan">DOC</span>
           </h1>
-          <p className="text-white/60">
-            Upload, convert, and edit your documents with AI assistance
+          
+          <p className="text-white/60 max-w-2xl mx-auto text-lg mb-12 font-light">
+            Advanced file manipulation powered by artificial intelligence.
+            <br />
+            <span className="text-neon-pink">Convert</span> • <span className="text-neon-purple">Edit</span> • <span className="text-neon-cyan">Analyze</span>
           </p>
+
+          {/* Quick Actions Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+            {[
+              { label: "Convert PDF", color: "from-red-500 to-orange-500" },
+              { label: "Edit Text", color: "from-blue-500 to-cyan-500" },
+              { label: "AI Analysis", color: "from-purple-500 to-pink-500" },
+              { label: "Merge Files", color: "from-green-500 to-emerald-500" },
+            ].map((action, i) => (
+              <motion.button
+                key={i}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative group overflow-hidden rounded-xl p-[1px]"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-20 group-hover:opacity-100 transition-opacity duration-500`} />
+                <div className="relative bg-dark-bg/90 backdrop-blur-xl rounded-xl p-4 h-full border border-white/10 group-hover:border-transparent transition-colors">
+                  <span className="font-semibold text-sm">{action.label}</span>
+                </div>
+              </motion.button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Main Layout */}
