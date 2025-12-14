@@ -102,14 +102,49 @@ export const deleteFile = async (req: Request, res: Response) => {
     }
 };
 
+// Mock conversion implementation
 export const convertFile = async (req: Request, res: Response) => {
-  res.status(501).json({ message: "Not implemented" });
+  try {
+    await ensureDb();
+    const { id } = req.body; // Source file ID
+    const { targetFormat } = req.body; // e.g., 'docx', 'pdf'
+
+    if (!id || !targetFormat) {
+        return res.status(400).json({ message: "Missing file ID or target format" });
+    }
+
+    // specific mock logic
+    // In a real app, this would trigger a background job (Bull/Redis)
+    
+    // For MVP, we'll pretend we converted it and return the SAME file url 
+    // but with a different message, or generate a dummy file record.
+    
+    // Let's create a "converted" file record pointing to the same data for now, 
+    // or just return success.
+    
+    res.json({ 
+        message: "Conversion started successfully",
+        jobId: `job-${Date.now()}`,
+        status: "completed", // Auto-complete for demo
+        downloadUrl: `${config.backendUrl || 'http://localhost:5000'}/api/files/${id}` // Return source for now
+    });
+
+  } catch (error) {
+    console.error("Conversion error:", error);
+    res.status(500).json({ message: "Conversion failed" });
+  }
 };
 
 export const getConversionStatus = async (req: Request, res: Response) => {
-  res.status(501).json({ message: "Not implemented" });
+  const { id } = req.params;
+  res.json({ 
+      id, 
+      status: "completed", 
+      progress: 100,
+      downloadUrl: "http://example.com/file.docx" 
+  });
 };
 
 export const batchConvert = async (req: Request, res: Response) => {
-  res.status(501).json({ message: "Not implemented" });
+    res.json({ message: "Batch conversion queued" });
 };

@@ -48,13 +48,14 @@ export default function FileUpload() {
         fileAPI
           .upload(file)
           .then((response) => {
+            const data = response.data;
             const uploadedFile: UploadedFile = {
-              id: generateId(),
-              name: file.name,
-              type: file.name.split(".").pop()?.toLowerCase() as any,
-              size: file.size,
+              id: data.id,
+              name: data.originalName,
+              type: data.originalName.split('.').pop()?.toLowerCase() as any,
+              size: data.size,
               uploadedAt: new Date(),
-              url: response.data.url,
+              url: data.url,
               userId: "user-1",
             };
             addFile(uploadedFile);

@@ -1,15 +1,48 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FileUpload from "@/components/editor/FileUpload";
 import FileList from "@/components/editor/FileList";
 import AISidebar from "@/components/ai/AISidebar";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
+import { fileAPI } from "@/lib/api";
+import { useAppStore } from "@/store/app";
+import { toast } from "react-hot-toast";
 
 export default function Home() {
   const [selectedText, setSelectedText] = useState("");
+  const { setFiles } = useAppStore();
+
+  useEffect(() => {
+    const loadFiles = async () => {
+      try {
+        const res = await fileAPI.listFiles();
+        // The backend returns { files: [...] } based on fileController.ts
+        if (res.data && res.data.files) {
+            // Map backend 'type' (mimetype usually) to likely extension if needed, 
+            // but fileController says it returns { id, name, size, mimetype, createdAt, url }
+            // The frontend UploadedFile type expects { id, name, type, size, uploadedAt, url, userId }
+            // We need to map it carefully.
+            const mappedFiles = res.data.files.map((f: any) => ({
+                id: f.id,
+                name: f.name,
+                type: f.name.split('.').pop()?.toLowerCase() as any,
+                size: f.size,
+                uploadedAt: new Date(f.createdAt),
+                url: f.url,
+                userId: "user-1" // Mock user
+            }));
+            setFiles(mappedFiles);
+        }
+      } catch (error) {
+        console.error("Failed to load files", error);
+        toast.error("Could not load your files");
+      }
+    };
+    loadFiles();
+  }, [setFiles]);
 
   return (
     <div className="min-h-screen bg-dark-bg">

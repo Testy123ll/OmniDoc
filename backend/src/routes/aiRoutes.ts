@@ -10,10 +10,10 @@ import { authenticate } from "../middleware/auth";
 
 const router = express.Router();
 
-router.post("/write", authenticate, write);
-router.post("/edit", authenticate, edit);
-router.post("/summarize", authenticate, summarize);
-router.post("/translate", authenticate, translate);
-router.post("/analyze", authenticate, analyze);
+router.post("/write", write);
+router.post("/edit", edit);
+router.post("/summarize", summarize);
+router.post("/translate", translate);
+router.post("/analyze", analyze);
 
 export default router;

@@ -18,6 +18,8 @@ interface AppStore {
   
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  
+  setFiles: (files: UploadedFile[]) => void;
 }
 
 export const useAppStore = create<AppStore>((set) => ({
@@ -41,4 +43,6 @@ export const useAppStore = create<AppStore>((set) => ({
   
   isDarkMode: true,
   toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
+  
+  setFiles: (files: UploadedFile[]) => set({ uploadedFiles: files }),
 }));
